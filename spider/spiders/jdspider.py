@@ -9,7 +9,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.sgml import SgmlLinkExtractor
 from spider.items import SpiderItem
 #from spider.utils.select_result import list_first_item,strip_null,deduplication,clean_url
-from scrapy import log
+from scrapy.spiders import logging
 from scrapy.http import Request
 from urlparse import urljoin
 import hashlib
@@ -47,16 +47,16 @@ class JDSpider(CrawlSpider):
                     urlhash = hashlib.md5(link).hexdigest()
                     if not serachr_page_urls.has_key(urlhash):
                         serachr_page_urls[urlhash] = link
-                        log.msg(urlhash, level=log.DEBUG)
-                        log.msg(link.decode(response.encoding), level=log.DEBUG)
+                        #logging.info(urlhash, level=log.DEBUG)
+                        #logging.info(link.decode(response.encoding), level=log.DEBUG)
                 
                 if item_string in link:
                     if not comment_string in link:
                         urlhash = hashlib.md5(link).hexdigest()
                         if not item_urls.has_key(urlhash):
                             item_urls[urlhash] = link
-                            log.msg(urlhash, level=log.DEBUG)
-                            log.msg(link.decode(response.encoding), level=log.DEBUG)
+                            #logging.info(urlhash, level=log.DEBUG)
+                            #logging.info(link.decode(response.encoding), level=log.DEBUG)
 
         for search in serachr_page_urls.values():
             yield Request(url=search, callback=self.parse)
@@ -119,7 +119,7 @@ class JDSpider(CrawlSpider):
         content = sel1.content #sel.text can also be used
         re = content.split('\n')
         price = json.loads(re[0])
-        log.msg("price is: " + price[0]["p"], level=log.INFO)
+        #log.msg("price is: " + price[0]["p"], level=log.INFO)
         if price[0]["p"]:
             item['price'] = price[0]["p"]
         '''Obtain comment'''
@@ -127,7 +127,7 @@ class JDSpider(CrawlSpider):
         commentResponse = requests.get(commentUrl)
         commentStr = commentResponse.content.split('\n')
         commentJson = json.loads(commentStr[0])
-        log.msg("comment response: " + commentStr[0], level=log.INFO)
+        #log.msg("comment response: " + commentStr[0], level=log.INFO)
         if commentJson:
             commentSummary = commentJson["CommentsCount"][0]
             item['commentCount'] = commentSummary["CommentCount"]

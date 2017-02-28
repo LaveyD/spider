@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import datetime
 from scrapy.exceptions import DropItem
 from scrapy.conf import settings
-from scrapy import log
+#from scrapy import log
 
 
 class MongoPipeline(object):
@@ -33,8 +33,8 @@ class MongoPipeline(object):
         #self.collection = db[self.MONGODB_COLLECTION]]
 
     def process_item(self, item, spider):
-        print 'processing============================='+ datetime.datetime.utcnow()
-        log.msg("========================processing=============================", level=log.INFO)
+        #print 'processing============================='+ datetime.datetime.utcnow()
+        #log.msg("========================processing=============================", level=log.INFO)
         brand = category = shopname = production_name = None
         if item.get('brand'):
             brand = item['brand']
@@ -70,9 +70,9 @@ class MongoPipeline(object):
         result = self.db['item_detail'].insert(item_detail)
         #item['mongodb_id'] = str(result)
 
-        log.msg("Item %s wrote to MongoDB database %s/item_detail" %
-                    (result, self.MONGODB_DB),
-                    level=log.DEBUG, spider=spider)
+        #log.msg("Item %s wrote to MongoDB database %s/item_detail" %
+                    #(result, self.MONGODB_DB),
+                    #level=log.DEBUG, spider=spider)
         return item
 
    

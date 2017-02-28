@@ -10,7 +10,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 from scrapy.selector import Selector
-from scrapy import log
+#from scrapy import log
 from twisted.enterprise import adbapi
 from scrapy.http import Request
 import MySQLdb
@@ -20,7 +20,7 @@ import MySQLdb.cursors
 class JdspiderPipeline(object):
     def __init__(self):
         self.dbpool = adbapi.ConnectionPool('MySQLdb',
-                                            host='10.222.49.26',
+                                            host='localhost',
                                             db='jdspider',
                                             user='root',
                                             passwd='123456',
@@ -36,13 +36,13 @@ class JdspiderPipeline(object):
         tx.execute("select * from JD_ITEMS where ITEM_PRODUCTION_ID = %s and ITEM_DATE = %s",
                    (item['productId'], item['date']))
         result = tx.fetchone()
-        log.msg(result, level=log.DEBUG)
+        #log.msg(result, level=log.DEBUG)
         #print result
         if result:
             log.msg("Item already stored in db:%s" % item, level=log.DEBUG)
         else:
             print '========================processing============================='
-            log.msg("========================processing=============================", level=log.INFO)
+            #log.msg("========================processing=============================", level=log.INFO)
             brand = category = shopname = production_name = None
             if item.get('brand'):
                 brand = item['brand']
@@ -64,13 +64,14 @@ class JdspiderPipeline(object):
                  item['productId'], item['price'], item['commentCount'], item['averageScore'], item['showCount'],
                  item['goodCount'], item['goodRate'], item['generalCount'], item['generalRate'], item['poorCount'],
                  item['poorRate'], item['date']))
-            log.msg("Item stored in db: %s" % item, level=log.DEBUG)
+            #log.msg("Item stored in db: %s" % item, level=log.DEBUG)
             tx.execute("select * from JD_ITEMS where ITEM_PRODUCTION_ID = %s and ITEM_DATE = %s",
                    (item['productId'], item['date']))
             saved_item = tx.fetchone()
-            log.msg(saved_item, level=log.INFO)
+            #log.msg(saved_item, level=log.INFO)
 
 
     def handle_error(self, e):
-        log.err(e)
+        print e
+        #log.err(e)
 

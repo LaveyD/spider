@@ -74,7 +74,7 @@ COOKIES_ENABLED = True
 #    'spider.pipelines.SomePipeline': 300,
 #}
 ITEM_PIPELINES = {
-	'spider.pipelines.JdspiderPipeline':400,
+	#'spider.pipelines.JdspiderPipeline':400,
    'spider.mongoPipelines.MongoPipeline':400,
 }
 
